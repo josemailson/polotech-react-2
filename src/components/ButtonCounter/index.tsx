@@ -6,7 +6,7 @@ export interface IButtonCounterProps {
 
 }
 
-const ButtonCounter = ({ title, active = false }: IButtonCounterProps) => {
+const ButtonCounter = ({ title, active = true }: IButtonCounterProps) => {
 
     const [count, setCount] = useState(0);
 
