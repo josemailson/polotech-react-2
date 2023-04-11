@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ListView from "../ListView";
 import ButtonListView from "../ButtonListView";
+import "./style.css";
 
 export interface IButtonCounterProps {
   title: string;
@@ -45,36 +46,38 @@ const ButtonCounter = ({ title, active = true }: IButtonCounterProps) => {
   }
 
   return (
-    <>
-      <button type="button" onClick={handleClick} disabled={!active}>
-        {title}
-      </button>
-      <ButtonListView
-        title={"Completa"}
-        color={"blue"}
-        onClick={() => handleButtonClick("Completa")}
-        disabled={isButtonDisabled('Completa')}
-      />
-      <ButtonListView
-        title={"Impares"}
-        color={"red"}
-        onClick={() => handleButtonClick("Impares")}
-        disabled={isButtonDisabled('Impares')}
-      />
-      <ButtonListView
-        title={"Pares"}
-        color={"green"}
-        onClick={() => handleButtonClick("Pares")}
-        disabled={isButtonDisabled('Pares')}
-      />
-      {renderList(list)}
-      <ButtonListView
+    <div className="container">
+      <div className="buttons">
+        <button className="button-counter" type="button" onClick={handleClick} disabled={!active}>
+          {title}
+        </button>
+        <ButtonListView
+          title={"Completa"}
+          color={"#3F3047"}
+          onClick={() => handleButtonClick("Completa")}
+          disabled={isButtonDisabled('Completa')}
+        />
+        <ButtonListView
+          title={"Impares"}
+          color={"#9BC995"}
+          onClick={() => handleButtonClick("Impares")}
+          disabled={isButtonDisabled('Impares')}
+        />
+        <ButtonListView
+          title={"Pares"}
+          color={"#5171a5"}
+          onClick={() => handleButtonClick("Pares")}
+          disabled={isButtonDisabled('Pares')}
+        />
+        <ButtonListView
         title={"Limpar Lista"}
-        color={"yellow"}
+        color={"#e3e92e"}
         onClick={() => handleClearClick()}
         disabled={false}
-      />
-    </>
+        />
+      </div>
+      {renderList(list)}
+    </div>
   );
 };
 
