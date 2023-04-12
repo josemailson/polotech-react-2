@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css"
+import List from "./ListView.style"
 
 export interface IListViewProps {
     listNumbers: number[];
@@ -7,7 +7,7 @@ export interface IListViewProps {
 
 const ListView = ({ listNumbers }: IListViewProps) => {
 
-    return <ul className="list">{listNumbers.map((number) => <li key={number}>{number}</li>)}</ul>;
+    return <List className="list">{listNumbers.map((number) => <li key={number}>{number}</li>)}</List>;
 };
 
 export default ListView;

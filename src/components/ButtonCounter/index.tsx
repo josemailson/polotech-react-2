@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ListView from "../ListView";
 import ButtonListView from "../ButtonListView";
-import "./style.css";
+import { Container, Buttons, ButtonCounterStyle } from "./ButtonCounter.style";
 
 export interface IButtonCounterProps {
   title: string;
@@ -46,11 +46,11 @@ const ButtonCounter = ({ title, active = true }: IButtonCounterProps) => {
   }
 
   return (
-    <div className="container">
-      <div className="buttons">
-        <button className="button-counter" type="button" onClick={handleClick} disabled={!active}>
+    <Container>
+      <Buttons>
+        <ButtonCounterStyle className="button-counter" type="button" onClick={handleClick} disabled={!active}>
           {title}
-        </button>
+        </ButtonCounterStyle>
         <ButtonListView
           title={"Completa"}
           color={"#3F3047"}
@@ -75,9 +75,9 @@ const ButtonCounter = ({ title, active = true }: IButtonCounterProps) => {
         onClick={() => handleClearClick()}
         disabled={false}
         />
-      </div>
+      </Buttons>
       {renderList(list)}
-    </div>
+    </Container>
   );
 };
 
