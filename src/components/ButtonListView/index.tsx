@@ -1,5 +1,4 @@
 import React from "react";
-import "./ButtonListView.style"
 import ButtonList from "./ButtonListView.style";
 
 export interface IButtonListViewProps {
@@ -12,7 +11,7 @@ export interface IButtonListViewProps {
 const ButtonListView = ({ title, color, onClick, disabled}: IButtonListViewProps) => {
 
   return (
-    <ButtonList className="button-list" type="button" style={{ backgroundColor: color }} onClick={onClick} disabled={disabled}>
+    <ButtonList className="button-list" type="button" color={color} onClick={onClick} disabled={disabled}>
       {title}
     </ButtonList>
   );
