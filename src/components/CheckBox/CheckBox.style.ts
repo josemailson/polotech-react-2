@@ -26,7 +26,7 @@ export const StyledCheckbox = styled.div<ICheckboxProps>`
   display: flex;
   width: 1.6rem;
   height: 1.6rem;
-  background: ${props => (props.checked ? 'salmon' : 'papayawhip')};
+  background: ${props => (props.checked ? '#e63946' : '#f1faee')};
   border-radius: 0.2rem;
   transition: all 150ms;
   ${Icon} {

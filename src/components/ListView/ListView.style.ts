@@ -8,9 +8,9 @@ export const ListContainer = styled.div`
 `;
 
 export const TodoListContainer = styled.div`
-    background: grey;
+    background: #457b9d;
     border-radius: 1rem;
-    padding: 3rem 1rem;
+    padding: 4rem 2.4rem;
     display: flex;
     flex-direction: column;
 `;
