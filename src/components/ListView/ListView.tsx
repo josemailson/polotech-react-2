@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ListContainer, TodoListContainer, TodoListItem } from "./ListView.style";
 import { ITaskState } from "./ListView.types";
 import Checkbox from "../CheckBox/CheckBox";
+import Spacer from "../Spacer/Spacer";
 
 const ListView = () => {
     const [tasks, setTasks] = useState<ITaskState[]>([
@@ -22,13 +23,15 @@ const ListView = () => {
         <ListContainer>
             <TodoListContainer>
                 {tasks.map((task) => (
-                    <TodoListItem key={task.id}>
-                        <Checkbox
+                    <>
+                        <TodoListItem key={task.id}>
+                            <Checkbox
                             checked={task.isComplete}
-                            onChange={() => handleTaskCompletion(task)}
-                        />
+                            onChange={() => handleTaskCompletion(task)} />
                         <label>{task.label}</label>
-                    </TodoListItem>
+                        </TodoListItem>
+                        <Spacer height={"8vh"} width={"56vw"} />
+                    </>
                 ))}
             </TodoListContainer>
         </ListContainer>
