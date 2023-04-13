@@ -1,14 +1,16 @@
 import React from 'react';
 import './App.css';
-import ButtonCounter from './components/ButtonCounter';
-import { GlobalStyle } from './styles';
+import { AppLayoutContainer, GlobalStyle } from './styles';
+import ListView from './components/ListView/ListView';
 
 function App() {
 
   return (
     <div>
       <GlobalStyle/>
-      <ButtonCounter title="Clique para adicionar elementos a uma lista" />
+      <AppLayoutContainer>
+        <ListView/>
+      </AppLayoutContainer>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     *{
@@ -9,4 +9,13 @@ export const GlobalStyle = createGlobalStyle`
         background: #f4fad2;
         color: #172c3c;
     }
-`
+`;
+
+export const AppLayoutContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    min-height: 100vh;
+`;
