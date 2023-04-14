@@ -23,17 +23,17 @@ const ListView = () => {
         <ListContainer>
             <TodoListContainer>
                 {tasks.map((task) => (
-                        <TodoListItem key={task.id}>
-                            <Checkbox
-                                checked={task.isComplete}
-                                onChange={() => handleTaskCompletion(task)} />
-                            <Spacer height={"inherit"} width={"2rem"} />
-                            {task.isComplete ? (
-                                <StrikethroughLabel>{task.label}</StrikethroughLabel>
-                            ) : (
-                                task.label
-                            )}
-                        </TodoListItem>
+                    <TodoListItem key={task.id}>
+                        <Checkbox
+                            checked={task.isComplete}
+                            onChange={() => handleTaskCompletion(task)} />
+                        <Spacer height={"inherit"} width={"2rem"} />
+                        {task.isComplete ? (
+                            <StrikethroughLabel>{task.label}</StrikethroughLabel>
+                        ) : (
+                            task.label
+                        )}
+                    </TodoListItem>
                 ))}
             </TodoListContainer>
         </ListContainer>

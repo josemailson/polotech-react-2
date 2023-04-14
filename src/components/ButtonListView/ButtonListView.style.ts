@@ -1,4 +1,4 @@
-import styled, { css }from "styled-components";
+import styled, { css } from "styled-components";
 
 const ButtonList = styled.button<{ color: string }>`
     display: inline-block;
@@ -30,7 +30,7 @@ const ButtonList = styled.button<{ color: string }>`
     }
 
     ${({ color }) =>
-    css`
+        css`
       background-color: ${color};
     `}
 `;

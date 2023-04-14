@@ -8,7 +8,7 @@ export interface IButtonListViewProps {
   disabled: boolean;
 }
 
-const ButtonListView = ({ title, color, onClick, disabled}: IButtonListViewProps) => {
+const ButtonListView = ({ title, color, onClick, disabled }: IButtonListViewProps) => {
 
   return (
     <ButtonList className="button-list" type="button" color={color} onClick={onClick} disabled={disabled}>

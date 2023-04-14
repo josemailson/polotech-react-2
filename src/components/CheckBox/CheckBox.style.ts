@@ -12,7 +12,7 @@ export const Icon = styled.svg`
   stroke-width: 0.2rem;
 `;
 
-export const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })<ICheckboxProps>`
+export const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' }) <ICheckboxProps>`
   position: absolute;
   overflow: hidden;
   clip: rect(0 0 0 0);
