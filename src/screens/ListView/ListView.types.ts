@@ -1,5 +1,5 @@
 export interface ITaskState {
-    id: number;
+    id: string;
     label: string;
     isComplete: boolean;
 }
