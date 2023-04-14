@@ -1,12 +1,12 @@
 import React from "react";
 import { SpacerContainer } from "./Spacer.style";
 
-export interface ISpacer {
-  height: string;
-  width: string;
+export type SpacerProps = {
+  height?: string;
+  width?: string;
 }
 
-const Spacer: React.FC<ISpacer> = ({ height, width }) => (
+const Spacer = ({ height, width }: SpacerProps) => (
   <SpacerContainer height={height} width={width} />
 );
 
