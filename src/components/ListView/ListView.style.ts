@@ -17,16 +17,14 @@ export const TodoListContainer = styled.div`
 
 export const TodoListItem = styled.label`
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   padding: 0.8rem;
   font-size: 1.3rem;
-  list-style: none;
   font-weight: bold;
   height: 2.4rem;
 `;
 
 export const StrikethroughLabel = styled.span`
   text-decoration: line-through;
-  margin-left: 0.5rem;
 `;

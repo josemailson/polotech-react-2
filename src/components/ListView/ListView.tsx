@@ -6,7 +6,7 @@ import Spacer from "../Spacer/Spacer";
 
 const ListView = () => {
     const [tasks, setTasks] = useState<ITaskState[]>([
-        { id: "1", label: "Primeira Task", isComplete: false }, { id: "2", label: "Segunda Task", isComplete: false }, { id: "3", label: "Terceira Task", isComplete: false }
+        { id: 1, label: "Primeira Task", isComplete: false }, { id: 2, label: "Segunda Task", isComplete: false }, { id: 3, label: "Terceira Task", isComplete: false }
     ]);
 
     const handleTaskCompletion = (task: ITaskState) => {
@@ -23,19 +23,17 @@ const ListView = () => {
         <ListContainer>
             <TodoListContainer>
                 {tasks.map((task) => (
-                    <>
                         <TodoListItem key={task.id}>
                             <Checkbox
                                 checked={task.isComplete}
                                 onChange={() => handleTaskCompletion(task)} />
+                            <Spacer height={"inherit"} width={"2rem"} />
                             {task.isComplete ? (
                                 <StrikethroughLabel>{task.label}</StrikethroughLabel>
                             ) : (
                                 task.label
                             )}
                         </TodoListItem>
-                        <Spacer height={"4vh"} width={"inherit"} />
-                    </>
                 ))}
             </TodoListContainer>
         </ListContainer>
