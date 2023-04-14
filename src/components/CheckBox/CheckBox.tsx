@@ -3,7 +3,7 @@ import { CheckboxContainer, HiddenCheckbox, Icon, StyledCheckbox } from './Check
 
 export interface ICheckboxProps {
   checked: boolean;
-  onChange: () => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Checkbox: React.FC<ICheckboxProps> = ({ checked, onChange }) => (
