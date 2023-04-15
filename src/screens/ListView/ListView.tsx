@@ -18,7 +18,12 @@ const ListView = () => {
 
   const addTask = (label: string) => {
     const id = nanoid();
-    setTasks((tasks) => [...tasks, { id, label: label, isComplete: false }]);
+    const isTaskExists = tasks.some(task => task.label.toLowerCase() === label.toLowerCase());
+    if (isTaskExists) {
+      alert("Tarefa já cadastrada!");
+      return;
+    }
+    setTasks(tasks => [...tasks, { id, label: label, isComplete: false }]);
   };
 
   const handleNewTaskKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
