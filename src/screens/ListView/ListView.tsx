@@ -48,6 +48,7 @@ const ListView = () => {
     return (
         <ListContainer>
             <Header title={"To Do App"} color={"#ffffff"} />
+            <h2>Total de tarefas: {tasks.length}</h2>
             <Spacer height="3rem" />
             <TodoListContainer>
                 {tasks.map((task) => (
