@@ -4,14 +4,16 @@ import ButtonList from "./ButtonListView.style";
 export interface IButtonListViewProps {
   title: string;
   color: string;
-  onClick?: () => void;
+  height: string;
+  width: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled: boolean;
 }
 
-const ButtonListView = ({ title, color, onClick, disabled }: IButtonListViewProps) => {
+const ButtonListView = ({ title, color, height, width, onClick, disabled }: IButtonListViewProps) => {
 
   return (
-    <ButtonList className="button-list" type="button" color={color} onClick={onClick} disabled={disabled}>
+    <ButtonList className="button-list" type="button" title={title} color={color} height={height} width={width} onClick={onClick} disabled={disabled}>
       {title}
     </ButtonList>
   );

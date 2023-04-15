@@ -1,17 +1,18 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { IButtonListViewProps } from "./ButtonListView";
 
-const ButtonList = styled.button<{ color: string }>`
+const ButtonList = styled.button<IButtonListViewProps>`
     display: inline-block;
-    height: 50px;
-    width: 10vw;
-    line-height: 50px;
+    height: ${(props) => props.height || "10vw"};
+    width: ${(props) => props.width || "10vw"};
+    background-color: ${(props) => props.color || "#ffffff"};
     text-align: center;
-    font-size: 12px;
+    font-size: 0.8rem;
     font-weight: 1000;
     color: #F0F6F6ff;
     text-transform: uppercase;
     border: none;
-    border-radius: 25px;
+    border-radius: 0.4rem;
     cursor: pointer;
     margin: 10px;
     box-shadow: 0px 3px 0px #a7848b;
@@ -28,11 +29,6 @@ const ButtonList = styled.button<{ color: string }>`
         box-shadow: none;
         cursor: not-allowed;
     }
-
-    ${({ color }) =>
-        css`
-      background-color: ${color};
-    `}
 `;
 
 export default ButtonList;

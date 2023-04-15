@@ -17,7 +17,7 @@ export const TodoListContainer = styled.div`
 
 export const TodoListItem = styled.label`
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
   padding: 0.8rem;
   font-size: 1.3rem;
