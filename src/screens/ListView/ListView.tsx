@@ -1,12 +1,12 @@
 import React, { ChangeEvent, useState, KeyboardEvent } from "react";
 import { ListContainer, TodoListContainer, TodoListItem, StrikethroughLabel } from "./ListView.style";
 import { ITaskState } from "./ListView.types";
-import Checkbox from "../../components/CheckBox/CheckBox";
-import Spacer from "../../components/Spacer/Spacer";
-import InputText from "../../components/InputText/InputText";
+import Checkbox from "components/CheckBox/CheckBox";
+import Spacer from "components/Spacer/Spacer";
+import InputText from "components/InputText/InputText";
 import { nanoid } from "nanoid";
-import Header from "../../components/Header/Header";
-import ButtonListView from "../../components/ButtonListView/ButtonListView";
+import Header from "components/Header/Header";
+import ButtonListView from "components/ButtonListView/ButtonListView";
 
 const ListView = () => {
   const [tasks, setTasks] = useState<ITaskState[]>([]);
@@ -54,6 +54,8 @@ const ListView = () => {
     <ListContainer>
       <Header title={"To Do App"} color={"#ffffff"} as="h1"/>
       <Header title={`Total de tarefas: ${tasks.length}`} color={"#ffffff"} as="h2"/>
+      <Spacer height="1rem" />
+      <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
       <Spacer height="3rem" />
       <TodoListContainer>
         {tasks.length === 0 ? (
@@ -78,9 +80,6 @@ const ListView = () => {
         ))}</>}
 
       </TodoListContainer>
-      <Spacer height="3rem" />
-      <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
-      <Spacer height="3rem" />
     </ListContainer>
   );
 };
