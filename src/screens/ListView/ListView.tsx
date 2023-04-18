@@ -55,8 +55,8 @@ const ListView = () => {
       <Header title={"To Do App"} color={"#ffffff"} as="h1"/>
       <Header title={`Total de tarefas: ${tasks.length}`} color={"#ffffff"} as="h2"/>
       <Spacer height="1rem" />
-      <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
-      <Spacer height="3rem" />
+      <InputText placeholder={"Pesquisar"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
+      <Spacer height="2rem" />
       <TodoListContainer>
         {tasks.length === 0 ? (
           <Header title={"Sem tarefas cadastradas"} color={"#ffffff"} as="h2"/>
@@ -78,8 +78,9 @@ const ListView = () => {
           </TodoListItem>
 
         ))}</>}
-
       </TodoListContainer>
+      <Spacer height="2rem" />
+      <InputText placeholder={"Adicioneb uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
     </ListContainer>
   );
 };
