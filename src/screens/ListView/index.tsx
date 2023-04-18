@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent } from "react";
+import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from "react";
 import { ListContainer, TodoListContainer, TodoListItem, StrikethroughLabel } from "./ListView.style";
 import { ITaskState } from "./ListView.types";
 import Checkbox from "components/CheckBox/CheckBox";
@@ -11,10 +11,22 @@ import ButtonListView from "components/ButtonListView/ButtonListView";
 const ListView = () => {
   const [tasks, setTasks] = useState<ITaskState[]>([]);
   const [newTaskLabel, setNewTaskLabel] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [tasksFilter, setTaskFilter] = useState<ITaskState[]>([]);
 
   const handleNewTaskLabelChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTaskLabel(event.target.value);
   };
+
+  const handleSearchTermChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  useEffect(() => {
+    const listTask = tasks.filter((eachTask) => eachTask.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    setTaskFilter(listTask);
+}, [searchTerm, tasks]);
+
 
   const addTask = (label: string) => {
     const id = nanoid();
@@ -55,12 +67,12 @@ const ListView = () => {
       <Header title={"To Do App"} color={"#ffffff"} as="h1"/>
       <Header title={`Total de tarefas: ${tasks.length}`} color={"#ffffff"} as="h2"/>
       <Spacer height="1rem" />
-      <InputText placeholder={"Pesquisar"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
+      <InputText placeholder={"Pesquisar"} inputColor={"#ffffff"} onChange={handleSearchTermChange} value={searchTerm} />
       <Spacer height="2rem" />
       <TodoListContainer>
         {tasks.length === 0 ? (
           <Header title={"Sem tarefas cadastradas"} color={"#ffffff"} as="h2"/>
-        ) : <>{tasks.map((task) => (
+        ) : <>{tasksFilter.map((task) => (
           <TodoListItem key={task.id}>
             <Checkbox
               checked={task.isComplete}
@@ -80,7 +92,7 @@ const ListView = () => {
         ))}</>}
       </TodoListContainer>
       <Spacer height="2rem" />
-      <InputText placeholder={"Adicioneb uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
+      <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
     </ListContainer>
   );
 };
