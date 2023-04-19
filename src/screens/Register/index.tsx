@@ -26,7 +26,7 @@ const Register = () => {
     createUserWithEmailAndPassword(email, password);
     setTimeout(() => {
       history("/");
-    }, 1000); // 1000 ms = 1 segundo
+    }, 1000);
   }  
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,19 +44,20 @@ const Register = () => {
       <Header title={"Criar conta"} color={"#ffffff"} as="h2" />
       <TodoListContainer>
         <InputText type={"email"} placeholder={"E-mail"} inputColor={"#ffffff"} onChange={handleEmailChange} value={email} />
-        <Spacer height="0.4rem" />
+        <Spacer height="0.8rem" />
         <InputText type={"password"} placeholder={"Senha"} inputColor={"#ffffff"} onChange={handlePasswordChange} value={password} />
         <Spacer height="1.2rem" />
         <ButtonListView 
             title={loading ? "Carregando..." : "Criar conta"} 
             color={"#81749c"} 
-            width={"92%"} 
+            width={"auto"} 
             height={"1.8rem"} 
             disabled={loading} 
             onClick={handleSignUp}
         />
+        <Spacer width="auto" height="0.8rem" />
         <Link to="/">
-          <ButtonListView title={"Já possui conta? Faça login"} color={"#81749c"} width={"92%"} height={"1.8rem"} disabled={loading} />
+          <ButtonListView title={"Já possui conta? Faça login"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={loading} />
         </Link>
       </TodoListContainer>
     </ListContainer>

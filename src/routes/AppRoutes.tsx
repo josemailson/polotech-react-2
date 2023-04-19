@@ -2,18 +2,19 @@ import { createBrowserRouter } from "react-router-dom";
 import ListView from "screens/ListView";
 import Login from "screens/Login";
 import Register from "screens/Register";
+import AuthRoute from "./AuthRoute";
 
 export const router = createBrowserRouter([
     {
       path: "/",
-      element: <Login />,
+      element: <AuthRoute><ListView /></AuthRoute>,
     },
     {
       path: "/register",
       element: <Register />,
     },
     {
-      path: "/home",
-      element: <ListView />,
+      path: "/login",
+      element: <Login />,
     },
   ]);

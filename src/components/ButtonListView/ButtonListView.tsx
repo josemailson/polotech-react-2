@@ -6,7 +6,7 @@ export interface IButtonListViewProps {
   color: string;
   height: string;
   width: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void | ( (email: string, password: string) => void)
   disabled: boolean;
 }
 

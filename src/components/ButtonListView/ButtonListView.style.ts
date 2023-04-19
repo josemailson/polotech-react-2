@@ -14,7 +14,6 @@ const ButtonList = styled.button<IButtonListViewProps>`
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
-    margin: 10px;
     box-shadow: 0px 3px 0px #a7848b;
     transition: all 0.1s ease-in-out;
 

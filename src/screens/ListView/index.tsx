@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from "react";
+import React, { ChangeEvent, useState, KeyboardEvent, useEffect, useContext } from "react";
 import { ListContainer, TodoListContainer, TodoListItem, StrikethroughLabel } from "./ListView.style";
 import { ITaskState } from "./ListView.types";
 import Checkbox from "components/CheckBox/CheckBox";
@@ -7,12 +7,21 @@ import InputText from "components/InputText/InputText";
 import { nanoid } from "nanoid";
 import Header from "components/Header/Header";
 import ButtonListView from "components/ButtonListView/ButtonListView";
+import { signOut } from "firebase/auth";
+import { auth } from "services/firebaseConfig"
+import { UserContext } from "contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const ListView = () => {
   const [tasks, setTasks] = useState<ITaskState[]>([]);
   const [newTaskLabel, setNewTaskLabel] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [tasksFilter, setTaskFilter] = useState<ITaskState[]>([]);
+  const history = useNavigate();
+
+  const userContext = useContext(UserContext);
+  console.log("🚀 ~ file: index.tsx:21 ~ ListView ~ userContext:", userContext.user?.user.uid);
+
 
   const handleNewTaskLabelChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTaskLabel(event.target.value);
@@ -62,13 +71,20 @@ const ListView = () => {
     setTasks(newTasks);
   };
 
+  const handleClickLogout = () => {
+    userContext.logout();
+    setTimeout(() => {
+      history("/");
+    }, 1000);
+  }
+
   return (
     <ListContainer>
       <Header title={"To Do App"} color={"#ffffff"} as="h1"/>
       <Header title={`Total de tarefas: ${tasks.length}`} color={"#ffffff"} as="h2"/>
-      <Spacer height="1rem" />
+      <Spacer height="0.4rem" />
       <InputText placeholder={"Pesquisar"} inputColor={"#ffffff"} onChange={handleSearchTermChange} value={searchTerm} />
-      <Spacer height="2rem" />
+      <Spacer height="0.8rem" />
       <TodoListContainer>
         {tasks.length === 0 ? (
           <Header title={"Sem tarefas cadastradas"} color={"#ffffff"} as="h2"/>
@@ -79,20 +95,22 @@ const ListView = () => {
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 handleTaskCompleteChange(event, task)
               } />
-            <Spacer width={"2rem"} />
+            <Spacer width={"0.8rem"} />
             {task.isComplete ? (
               <StrikethroughLabel>{task.label}</StrikethroughLabel>
             ) : (
               task.label
             )}
-            <Spacer width={"2rem"} />
+            <Spacer width={"0.8rem"} />
             <ButtonListView title={"x"} color={"#e63946"} width={"1.8rem"} height={"1.8rem"} disabled={false} onClick={(event) => handleClickRemove(event, task.id)} />
           </TodoListItem>
 
         ))}</>}
       </TodoListContainer>
-      <Spacer height="2rem" />
+      <Spacer height="0.8rem" />
       <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
+      <Spacer height="0.8rem" />
+      <ButtonListView title={"Sair"} color={"#81749c"} width="auto" height={"1.8rem"} disabled={false} onClick={handleClickLogout}/>
     </ListContainer>
   );
 };
