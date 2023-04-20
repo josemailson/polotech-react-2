@@ -7,21 +7,56 @@ import InputText from "components/InputText/InputText";
 import { nanoid } from "nanoid";
 import Header from "components/Header/Header";
 import ButtonListView from "components/ButtonListView/ButtonListView";
-import { signOut } from "firebase/auth";
-import { auth } from "services/firebaseConfig"
 import { UserContext } from "contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { getDocs, collection, query, where } from 'firebase/firestore';
+import { firestore } from "services/firebaseConfig";
 
 const ListView = () => {
   const [tasks, setTasks] = useState<ITaskState[]>([]);
   const [newTaskLabel, setNewTaskLabel] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [tasksFilter, setTaskFilter] = useState<ITaskState[]>([]);
-  const history = useNavigate();
+  const [shouldFetchTodos, setShouldFetchTodos] = useState(true); 
 
   const userContext = useContext(UserContext);
-  console.log("🚀 ~ file: index.tsx:21 ~ ListView ~ userContext:", userContext.user?.user.uid);
 
+  useEffect(() => {
+    // Adicionado verificação para buscar tarefas apenas se shouldFetchTodos for true
+    if (shouldFetchTodos) {
+      const fetchTodos = async () => {
+        if (!userContext.user?.user) {
+          return; // Não faz nada se não houver usuário logado
+        }
+
+        const q = query(
+          collection(firestore, "todo"),
+          where("userId", "==", userContext.user.user.uid)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const tasks = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            label: data.label,
+            isComplete: data.isCompleted,
+            userId: data.userId,
+          };
+        });
+
+        setTasks(tasks);
+      };
+
+      fetchTodos();
+      setShouldFetchTodos(false); // Altera o estado para false para evitar buscas desnecessárias
+    }
+  }, [userContext.user?.user, shouldFetchTodos]); // Adicionado shouldFetchTodos como dependência
+
+
+  console.log(tasks);
+
+  const history = useNavigate();
 
   const handleNewTaskLabelChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTaskLabel(event.target.value);
@@ -34,17 +69,17 @@ const ListView = () => {
   useEffect(() => {
     const listTask = tasks.filter((eachTask) => eachTask.label.toLowerCase().includes(searchTerm.toLowerCase()))
     setTaskFilter(listTask);
-}, [searchTerm, tasks]);
+  }, [searchTerm, tasks]);
 
 
   const addTask = (label: string) => {
-    const id = nanoid();
     const isTaskExists = tasks.some(task => task.label.toLowerCase() === label.toLowerCase());
     if (isTaskExists) {
       alert("Tarefa já cadastrada!");
       return;
     }
-    setTasks(tasks => [...tasks, { id, label: label, isComplete: false }]);
+    userContext.addTask(label);
+    setShouldFetchTodos(true);
   };
 
   const handleNewTaskKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -80,14 +115,14 @@ const ListView = () => {
 
   return (
     <ListContainer>
-      <Header title={"To Do App"} color={"#ffffff"} as="h1"/>
-      <Header title={`Total de tarefas: ${tasks.length}`} color={"#ffffff"} as="h2"/>
+      <Header title={"To Do App"} color={"#ffffff"} as="h1" />
+      <Header title={`Total de tarefas: ${tasks.length}`} color={"#ffffff"} as="h2" />
       <Spacer height="0.4rem" />
       <InputText placeholder={"Pesquisar"} inputColor={"#ffffff"} onChange={handleSearchTermChange} value={searchTerm} />
       <Spacer height="0.8rem" />
       <TodoListContainer>
         {tasks.length === 0 ? (
-          <Header title={"Sem tarefas cadastradas"} color={"#ffffff"} as="h2"/>
+          <Header title={"Sem tarefas cadastradas"} color={"#ffffff"} as="h2" />
         ) : <>{tasksFilter.map((task) => (
           <TodoListItem key={task.id}>
             <Checkbox
@@ -110,7 +145,7 @@ const ListView = () => {
       <Spacer height="0.8rem" />
       <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
       <Spacer height="0.8rem" />
-      <ButtonListView title={"Sair"} color={"#81749c"} width="auto" height={"1.8rem"} disabled={false} onClick={handleClickLogout}/>
+      <ButtonListView title={"Sair"} color={"#81749c"} width="auto" height={"1.8rem"} disabled={false} onClick={handleClickLogout} />
     </ListContainer>
   );
 };
