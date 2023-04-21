@@ -1,9 +1,8 @@
-import { AuthError, User, UserCredential, signOut } from "firebase/auth";
+import { AuthError, UserCredential, signOut } from "firebase/auth";
 import { createContext, useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, firestore } from "services/firebaseConfig";
-import { DocumentData, doc, getDoc, addDoc, collection } from "firebase/firestore";
-import { ITaskState } from "screens/ListView/ListView.types";
+import { addDoc, collection } from "firebase/firestore";
 
 type UserContextType = {
   handleSignIn: (email: string, password: string) => void;
@@ -11,7 +10,6 @@ type UserContextType = {
   loading: boolean;
   error: AuthError | undefined;
   logout: () => void;
-  getUserData: (user: User) => Promise<DocumentData | null>;
   addTask: (label: string) => Promise<void>;
 }
 
@@ -45,22 +43,12 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
     signInWithEmailAndPassword(email, password);
   }
 
-  const getUserData = async (user: User) => {
-    const docRef = doc(firestore, "todo", user.uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      console.log("No such document!");
-      return null;
-    }
-  }
-
   const addTask = async (label: string) => {
     try {
       const docRef = await addDoc(collection(firestore, "todo"), {
         isComplete: false,
         label: label,
+        date: Date.now(),
         userId: user?.user.uid,
       });
       console.log("Document written with ID: ", docRef.id);
@@ -71,7 +59,7 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
 
 
 
-  return <UserContext.Provider value={{ handleSignIn, user, loading, error, logout, getUserData, addTask }}>
+  return <UserContext.Provider value={{ handleSignIn, user, loading, error, logout, addTask }}>
     {children}
   </UserContext.Provider>
 }

@@ -4,12 +4,11 @@ import { ITaskState } from "./ListView.types";
 import Checkbox from "components/CheckBox/CheckBox";
 import Spacer from "components/Spacer/Spacer";
 import InputText from "components/InputText/InputText";
-import { nanoid } from "nanoid";
 import Header from "components/Header/Header";
 import ButtonListView from "components/ButtonListView/ButtonListView";
 import { UserContext } from "contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { getDocs, collection, query, where } from 'firebase/firestore';
+import { getDocs, collection, query, where, orderBy } from 'firebase/firestore';
 import { firestore } from "services/firebaseConfig";
 
 const ListView = () => {
@@ -31,7 +30,8 @@ const ListView = () => {
 
         const q = query(
           collection(firestore, "todo"),
-          where("userId", "==", userContext.user.user.uid)
+          where("userId", "==", userContext.user.user.uid),
+          orderBy("date", "asc")
         );
 
         const querySnapshot = await getDocs(q);
@@ -41,6 +41,7 @@ const ListView = () => {
             id: doc.id,
             label: data.label,
             isComplete: data.isCompleted,
+            date: data.date,
             userId: data.userId,
           };
         });
