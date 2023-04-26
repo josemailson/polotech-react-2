@@ -1,6 +1,6 @@
-import { AuthError, User, UserCredential, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { User, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { createContext, useState } from "react";
-import { useAuthState, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "services/firebaseConfig";
 import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 
@@ -45,6 +45,7 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
         date: Date.now(),
         userId: user?.uid,
       });
+      console.log("Document added: ", docRef);
     } catch (e) {
       console.error("Error adding document: ", e);
     }  
@@ -55,7 +56,7 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
       const docRef = await updateDoc(doc(firestore, "todo", taskId), {
         isCompleted: isCompleted,
       });
-      console.log("Document updated with ID: ", taskId);
+      console.log("Document updated: ", docRef);
     } catch (e) {
       console.error("Error updating document: ", e);
     }  
@@ -64,7 +65,7 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
   const deleteTask = async (taskId: string) => {
     try {
       const docRef = await deleteDoc(doc(firestore, "todo", taskId));
-      console.log("Document deleted with ID: ", taskId);
+      console.log("Document deleted: ", docRef);
     } catch (e) {
       console.error("Error deleting document: ", e);
     }  

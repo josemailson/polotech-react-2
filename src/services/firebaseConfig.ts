@@ -1,7 +1,6 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore , doc, collection, DocumentData, CollectionReference } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAP4g4iRP_67uzjhTnuS8Cp0WNrv-RHC5w",
@@ -16,8 +15,3 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
-export const doccument = doc;
-
-const createCollection = <T = DocumentData>(collectionName: string) => {
-  return collection(firestore, collectionName) as CollectionReference<T>
-}
