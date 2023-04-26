@@ -1,7 +1,7 @@
 export interface ITaskState {
     id: string;
     label: string;
-    isComplete: boolean;
+    isCompleted: boolean;
     date: number;
     userId?: string;
 }

@@ -30,7 +30,7 @@ const Login = () => {
 
   const handleClickSignIn = (email: string, passowrd: string) => {
     handleSignIn(email, password);
-    console.log(user?.user.email);
+    console.log(user?.email);
     setTimeout(() => {
       history("/");
     }, 1000);

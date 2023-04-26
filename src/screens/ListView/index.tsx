@@ -21,41 +21,33 @@ const ListView = () => {
   const userContext = useContext(UserContext);
 
   useEffect(() => {
-    // Adicionado verificação para buscar tarefas apenas se shouldFetchTodos for true
     if (shouldFetchTodos) {
       const fetchTodos = async () => {
-        if (!userContext.user?.user) {
-          return; // Não faz nada se não houver usuário logado
+        if (!userContext.user) {
+          return;
         }
-
         const q = query(
           collection(firestore, "todo"),
-          where("userId", "==", userContext.user.user.uid),
+          where("userId", "==", userContext.user.uid),
           orderBy("date", "asc")
         );
-
         const querySnapshot = await getDocs(q);
         const tasks = querySnapshot.docs.map((doc) => {
           const data = doc.data();
           return {
             id: doc.id,
             label: data.label,
-            isComplete: data.isCompleted,
+            isCompleted: data.isCompleted,
             date: data.date,
             userId: data.userId,
           };
         });
-
         setTasks(tasks);
+        setShouldFetchTodos(false);
       };
-
       fetchTodos();
-      setShouldFetchTodos(false); // Altera o estado para false para evitar buscas desnecessárias
     }
-  }, [userContext.user?.user, shouldFetchTodos]); // Adicionado shouldFetchTodos como dependência
-
-
-  console.log(tasks);
+  }, [userContext.user, shouldFetchTodos]);
 
   const history = useNavigate();
 
@@ -73,13 +65,13 @@ const ListView = () => {
   }, [searchTerm, tasks]);
 
 
-  const addTask = (label: string) => {
+  const addTask = async (label: string) => {
     const isTaskExists = tasks.some(task => task.label.toLowerCase() === label.toLowerCase());
     if (isTaskExists) {
       alert("Tarefa já cadastrada!");
       return;
     }
-    userContext.addTask(label);
+    await userContext.addTask(label);
     setShouldFetchTodos(true);
   };
 
@@ -90,12 +82,9 @@ const ListView = () => {
     }
   };
 
-  const updateTaskCompletion = (taskId: string, isComplete: boolean) => {
-    setTasks((tasks) => tasks.map((task) => {
-      if (task.id === taskId) return { ...task, isComplete }
-      return task;
-    })
-    )
+  const updateTaskCompletion = async (taskId: string, isCompleted: boolean) => {
+    await userContext.updateTask(taskId, isCompleted);
+    setShouldFetchTodos(true);
   }
 
   const handleTaskCompleteChange = (event: ChangeEvent<HTMLInputElement>, eachTask: ITaskState) => {
@@ -103,9 +92,13 @@ const ListView = () => {
   }
 
   const handleClickRemove = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, taskId: string) => {
-    const newTasks = tasks.filter((item) => item.id !== taskId);
-    setTasks(newTasks);
+    updateTaskDeletion(taskId);
   };
+
+  const updateTaskDeletion = async (taskId: string) => {
+    await userContext.deleteTask(taskId);
+    setShouldFetchTodos(true);
+  }
 
   const handleClickLogout = () => {
     userContext.logout();
@@ -127,12 +120,12 @@ const ListView = () => {
         ) : <>{tasksFilter.map((task) => (
           <TodoListItem key={task.id}>
             <Checkbox
-              checked={task.isComplete}
+              checked={task.isCompleted}
               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                 handleTaskCompleteChange(event, task)
               } />
             <Spacer width={"0.8rem"} />
-            {task.isComplete ? (
+            {task.isCompleted ? (
               <StrikethroughLabel>{task.label}</StrikethroughLabel>
             ) : (
               task.label
