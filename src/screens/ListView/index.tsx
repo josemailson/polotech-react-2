@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent, useEffect, useContext } from "react";
+import React, { ChangeEvent, useState, KeyboardEvent, useEffect, useContext, useMemo } from "react";
 import { ListContainer, TodoListContainer, TodoListItem, StrikethroughLabel } from "./ListView.style";
 import { ITaskState } from "./ListView.types";
 import Checkbox from "components/CheckBox/CheckBox";
@@ -16,7 +16,15 @@ const ListView = () => {
   const [newTaskLabel, setNewTaskLabel] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [tasksFilter, setTaskFilter] = useState<ITaskState[]>([]);
-  const [shouldFetchTodos, setShouldFetchTodos] = useState(true); 
+  const [shouldFetchTodos, setShouldFetchTodos] = useState(true);
+  const totalTasks = useMemo(() => tasks.length, [tasks]);
+
+  const completedTasks = useMemo(() => tasks.filter(task => task.isCompleted), [tasks]);
+  const pendingTasks = useMemo(() => tasks.filter(task => !task.isCompleted), [tasks]);
+
+  const totalCompletedTasks = useMemo(() => completedTasks.length, [completedTasks]);
+  const totalPendingTasks = useMemo(() => pendingTasks.length, [pendingTasks]);
+
 
   const userContext = useContext(UserContext);
 
@@ -110,7 +118,8 @@ const ListView = () => {
   return (
     <ListContainer>
       <Header title={"To Do App"} color={"#ffffff"} as="h1" />
-      <Header title={`Total de tarefas: ${tasks.length}`} color={"#ffffff"} as="h2" />
+      <Header title={`Total de tarefas: ${totalTasks}`} color={"#ffffff"} as="h2" />
+      <Header title={`Concluídas: ${totalCompletedTasks} | Pendentes: ${totalPendingTasks}`} color={"#ffffff"} as="h3" />
       <Spacer height="0.4rem" />
       <InputText placeholder={"Pesquisar"} inputColor={"#ffffff"} onChange={handleSearchTermChange} value={searchTerm} />
       <Spacer height="0.8rem" />
