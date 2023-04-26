@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent, useMemo } from "react";
+import React, { ChangeEvent, useState, KeyboardEvent, useCallback } from "react";
 import { ListContainer, TodoListContainer, TodoListItem, StrikethroughLabel } from "./ListView.style";
 import { ITaskState } from "./ListView.types";
 import Checkbox from "components/CheckBox/CheckBox";
@@ -11,17 +11,17 @@ import { useNavigate } from "react-router-dom";
 
 const ListView = () => {
   const [newTaskLabel, setNewTaskLabel] = useState("");
-  const { 
-    tasks, 
-    searchTerm, 
-    tasksFilter, 
-    setSearchTerm, 
-    setShouldFetchTodos, 
-    logout, 
-    addTask, 
-    updateTask, 
+  const {
+    tasks,
+    searchTerm,
+    tasksFilter,
+    setSearchTerm,
+    setShouldFetchTodos,
+    logout,
+    addTask,
+    updateTask,
     deleteTask,
-    Status, 
+    Status,
   } = useTask();
 
   const history = useNavigate();
@@ -35,22 +35,21 @@ const ListView = () => {
   };
 
 
-  const handleAddTask = async (label: string) => {
-    const isTaskExists = tasks.some(task => task.label.toLowerCase() === label.toLowerCase());
-    if (isTaskExists) {
-      alert("Tarefa já cadastrada!");
-      return;
-    }
-    await addTask(label);
-    setShouldFetchTodos(true);
-  };
-
-  const handleNewTaskKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && newTaskLabel !== "") {
-      handleAddTask(newTaskLabel);
-      setNewTaskLabel("");
-    }
-  };
+  const handleNewTaskKeyPress = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === "Enter" && newTaskLabel !== "") {
+        const isTaskExists = tasks.some(task => task.label.toLowerCase() === newTaskLabel.toLowerCase());
+        if (isTaskExists) {
+          alert("Tarefa já cadastrada!");
+          return;
+        }
+        addTask(newTaskLabel);
+        setShouldFetchTodos(true);
+        setNewTaskLabel("");
+      }
+    },
+    [addTask, setShouldFetchTodos, newTaskLabel, tasks]
+  );
 
   const updateTaskCompletion = async (taskId: string, isCompleted: boolean) => {
     await updateTask(taskId, isCompleted);
