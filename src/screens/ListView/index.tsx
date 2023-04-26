@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, KeyboardEvent, useEffect, useContext, useMemo } from "react";
+import React, { ChangeEvent, useState, KeyboardEvent, useMemo } from "react";
 import { ListContainer, TodoListContainer, TodoListItem, StrikethroughLabel } from "./ListView.style";
 import { ITaskState } from "./ListView.types";
 import Checkbox from "components/CheckBox/CheckBox";
@@ -6,56 +6,23 @@ import Spacer from "components/Spacer/Spacer";
 import InputText from "components/InputText/InputText";
 import Header from "components/Header/Header";
 import ButtonListView from "components/ButtonListView/ButtonListView";
-import { UserContext } from "contexts/UserContext";
+import { useTask } from "contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { getDocs, collection, query, where, orderBy } from 'firebase/firestore';
-import { firestore } from "services/firebaseConfig";
 
 const ListView = () => {
-  const [tasks, setTasks] = useState<ITaskState[]>([]);
   const [newTaskLabel, setNewTaskLabel] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [tasksFilter, setTaskFilter] = useState<ITaskState[]>([]);
-  const [shouldFetchTodos, setShouldFetchTodos] = useState(true);
-  const totalTasks = useMemo(() => tasks.length, [tasks]);
-
-  const completedTasks = useMemo(() => tasks.filter(task => task.isCompleted), [tasks]);
-  const pendingTasks = useMemo(() => tasks.filter(task => !task.isCompleted), [tasks]);
-
-  const totalCompletedTasks = useMemo(() => completedTasks.length, [completedTasks]);
-  const totalPendingTasks = useMemo(() => pendingTasks.length, [pendingTasks]);
-
-
-  const userContext = useContext(UserContext);
-
-  useEffect(() => {
-    if (shouldFetchTodos) {
-      const fetchTodos = async () => {
-        if (!userContext.user) {
-          return;
-        }
-        const q = query(
-          collection(firestore, "todo"),
-          where("userId", "==", userContext.user.uid),
-          orderBy("date", "asc")
-        );
-        const querySnapshot = await getDocs(q);
-        const tasks = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            label: data.label,
-            isCompleted: data.isCompleted,
-            date: data.date,
-            userId: data.userId,
-          };
-        });
-        setTasks(tasks);
-        setShouldFetchTodos(false);
-      };
-      fetchTodos();
-    }
-  }, [userContext.user, shouldFetchTodos]);
+  const { 
+    tasks, 
+    searchTerm, 
+    tasksFilter, 
+    setSearchTerm, 
+    setShouldFetchTodos, 
+    logout, 
+    addTask, 
+    updateTask, 
+    deleteTask,
+    Status, 
+  } = useTask();
 
   const history = useNavigate();
 
@@ -67,31 +34,26 @@ const ListView = () => {
     setSearchTerm(event.target.value);
   };
 
-  useEffect(() => {
-    const listTask = tasks.filter((eachTask) => eachTask.label.toLowerCase().includes(searchTerm.toLowerCase()))
-    setTaskFilter(listTask);
-  }, [searchTerm, tasks]);
 
-
-  const addTask = async (label: string) => {
+  const handleAddTask = async (label: string) => {
     const isTaskExists = tasks.some(task => task.label.toLowerCase() === label.toLowerCase());
     if (isTaskExists) {
       alert("Tarefa já cadastrada!");
       return;
     }
-    await userContext.addTask(label);
+    await addTask(label);
     setShouldFetchTodos(true);
   };
 
   const handleNewTaskKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && newTaskLabel !== "") {
-      addTask(newTaskLabel);
+      handleAddTask(newTaskLabel);
       setNewTaskLabel("");
     }
   };
 
   const updateTaskCompletion = async (taskId: string, isCompleted: boolean) => {
-    await userContext.updateTask(taskId, isCompleted);
+    await updateTask(taskId, isCompleted);
     setShouldFetchTodos(true);
   }
 
@@ -104,12 +66,12 @@ const ListView = () => {
   };
 
   const updateTaskDeletion = async (taskId: string) => {
-    await userContext.deleteTask(taskId);
+    await deleteTask(taskId);
     setShouldFetchTodos(true);
   }
 
   const handleClickLogout = () => {
-    userContext.logout();
+    logout();
     setTimeout(() => {
       history("/");
     }, 1000);
@@ -118,8 +80,7 @@ const ListView = () => {
   return (
     <ListContainer>
       <Header title={"To Do App"} color={"#ffffff"} as="h1" />
-      <Header title={`Total de tarefas: ${totalTasks}`} color={"#ffffff"} as="h2" />
-      <Header title={`Concluídas: ${totalCompletedTasks} | Pendentes: ${totalPendingTasks}`} color={"#ffffff"} as="h3" />
+      {Status}
       <Spacer height="0.4rem" />
       <InputText placeholder={"Pesquisar"} inputColor={"#ffffff"} onChange={handleSearchTermChange} value={searchTerm} />
       <Spacer height="0.8rem" />
