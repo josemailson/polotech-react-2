@@ -3,21 +3,28 @@ import Header from "components/Header/Header";
 import InputText from "components/InputText/InputText";
 import Spacer from "components/Spacer/Spacer";
 import { useTask } from "contexts/UserContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ListContainer, TodoListContainer } from "screens/ListView/ListView.style";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "services/firebaseConfig";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const {
-    handleSignIn,
+    setAuthing,
+    setShouldFetchTodos,
+  } = useTask();
+
+  const [
+    signInWithEmailAndPassword,
     user,
     loading,
     error,
-  } = useTask();
+  ] = useSignInWithEmailAndPassword(auth);
 
   const history = useNavigate();
 
@@ -29,25 +36,36 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleClickSignIn = (email: string, password: string) => {
-    handleSignIn(email, password);
+  const validateEmail = (email: string): string | undefined => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+        return 'O e-mail precisa ser válido';
+    }
+  };
+
+  useEffect(() => {
     const toastPosition = toast.POSITION.TOP_RIGHT;
-    if (user) {
+    if (error) {
+      toast.error(error.message, {position: toastPosition});
+    } else if (loading) {
+      toast.info("Realizando login...", {position: toastPosition});
+    } else if (user) {
       toast.success("Login realizado com sucesso!", {position: toastPosition});
+      setAuthing(true);
+      setShouldFetchTodos(true);
       setTimeout(() => {
         history("/");
       }, 1000);
-    } else {
-      toast.error("Usuário ou senha não encontrado", {position: toastPosition});
     }
-  }
+  }, [error, loading, user, setAuthing, setShouldFetchTodos, history]);
 
-  if (error) {
-    return (
-      <div>
-        <p>Error: {error.message}</p>
-      </div>
-    );
+  const handleClickSignIn = (email: string, password: string) => {
+    const emailError = validateEmail(email);
+    if(emailError) {
+      toast.error(emailError, {position: toast.POSITION.TOP_RIGHT});
+      return;
+    }
+    signInWithEmailAndPassword(email, password);
   }
   
   return (

@@ -1,4 +1,4 @@
-import { User, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { User, signOut } from "firebase/auth";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "services/firebaseConfig";
@@ -7,7 +7,6 @@ import { ITaskState } from "screens/ListView/ListView.types";
 import Header from "components/Header/Header";
 
 type UserContextType = {
-  handleSignIn: (email: string, password: string) => void;
   user: User | null | undefined;
   loading: boolean;
   error: Error | undefined;
@@ -43,11 +42,6 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
     setAuthing(false);
     signOut(auth);
   };
-
-  function handleSignIn(email: string, password: string) {
-    setAuthing(true);
-    signInWithEmailAndPassword(auth, email, password);
-  }
 
   const [user, loading, error] = useAuthState(auth);
 
@@ -147,7 +141,6 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
 
   return <UserContext.Provider value={
     { 
-      handleSignIn,
       user,
       loading, 
       error, 
