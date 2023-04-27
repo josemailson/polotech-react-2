@@ -8,6 +8,7 @@ import Header from "components/Header/Header";
 import ButtonListView from "components/ButtonListView/ButtonListView";
 import { useTask } from "contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 const ListView = () => {
   const [newTaskLabel, setNewTaskLabel] = useState("");
@@ -37,10 +38,11 @@ const ListView = () => {
 
   const handleNewTaskKeyPress = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
+      const toastPosition = toast.POSITION.TOP_RIGHT;
       if (event.key === "Enter" && newTaskLabel !== "") {
         const isTaskExists = tasks.some(task => task.label.toLowerCase() === newTaskLabel.toLowerCase());
         if (isTaskExists) {
-          alert("Tarefa já cadastrada!");
+          toast.error("Tarefa já cadastrada!", {position: toastPosition});
           return;
         }
         addTask(newTaskLabel);
@@ -107,6 +109,7 @@ const ListView = () => {
       </TodoListContainer>
       <Spacer height="0.8rem" />
       <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
+      <ToastContainer />
       <Spacer height="0.8rem" />
       <ButtonListView type="button" title={"Sair"} color={"#81749c"} width="auto" height={"1.8rem"} disabled={false} onClick={handleClickLogout} />
     </ListContainer>

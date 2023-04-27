@@ -21,6 +21,8 @@ type UserContextType = {
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
   tasksFilter: ITaskState[];
   Status: JSX.Element;
+  authing:  boolean;
+  setAuthing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type UserContextProviderType = {
@@ -160,6 +162,8 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
       updateTask, 
       deleteTask, 
       Status,
+      authing,
+      setAuthing,
       }}>
     {children}
   </UserContext.Provider>

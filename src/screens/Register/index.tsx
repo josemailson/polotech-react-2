@@ -1,21 +1,25 @@
-import ButtonListView from "components/ButtonListView/ButtonListView";
-import Header from "components/Header/Header";
-import InputText from "components/InputText/InputText";
-import Spacer from "components/Spacer/Spacer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ListContainer, TodoListContainer } from "screens/ListView/ListView.style";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from "services/firebaseConfig";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import ButtonListView from "components/ButtonListView/ButtonListView";
+import Header from "components/Header/Header";
+import InputText from "components/InputText/InputText";
+import Spacer from "components/Spacer/Spacer";
+import { useTask } from "contexts/UserContext";
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const history = useNavigate();
-  
+
+  const {
+    setAuthing,
+  } = useTask();
+
   const [
     createUserWithEmailAndPassword,
     user,
@@ -30,19 +34,29 @@ const Register = () => {
     }
   };
 
+  useEffect(() => {
+    const toastPosition = toast.POSITION.TOP_RIGHT;
+    if (error) {
+      toast.error(error.message, {position: toastPosition});
+    } else if (loading) {
+      toast.info("Criando conta...", {position: toastPosition});
+    } else if (user) {
+      toast.success("Conta criada com sucesso!", {position: toastPosition});
+      setAuthing(false);
+      setTimeout(() => {
+        history("/login");
+      }, 1000);
+    }
+  }, [error, loading, user, setAuthing, history]);
+
   function handleSignUp(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     const emailError = validateEmail(email);
-    const toastPosition = toast.POSITION.TOP_RIGHT;
     if(emailError) {
-      toast.error(emailError, {position: toastPosition});
-      return
+      toast.error(emailError, {position: toast.POSITION.TOP_RIGHT});
+      return;
     }
     createUserWithEmailAndPassword(email, password);
-    toast.success("Conta criada com sucesso!", {position: toastPosition});
-    setTimeout(() => {
-      history("/");
-    }, 1000);
   }  
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
