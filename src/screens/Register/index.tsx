@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ListContainer, TodoListContainer } from "screens/ListView/ListView.style";
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from "services/firebaseConfig";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Register = () => {
@@ -21,9 +23,23 @@ const Register = () => {
     error,
   ] = useCreateUserWithEmailAndPassword(auth);
 
+  const validateEmail = (email: string): string | undefined => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!emailRegex.test(email)) {
+        return 'O e-mail precisa ser válido';
+    }
+  };
+
   function handleSignUp(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
+    const emailError = validateEmail(email);
+    const toastPosition = toast.POSITION.TOP_RIGHT;
+    if(emailError) {
+      toast.error(emailError, {position: toastPosition});
+      return
+    }
     createUserWithEmailAndPassword(email, password);
+    toast.success("Conta criada com sucesso!", {position: toastPosition});
     setTimeout(() => {
       history("/");
     }, 1000);
@@ -47,7 +63,8 @@ const Register = () => {
         <Spacer height="0.8rem" />
         <InputText type={"password"} placeholder={"Senha"} inputColor={"#ffffff"} onChange={handlePasswordChange} value={password} />
         <Spacer height="1.2rem" />
-        <ButtonListView 
+        <ButtonListView
+            type="submit" 
             title={loading ? "Carregando..." : "Criar conta"} 
             color={"#81749c"} 
             width={"auto"} 
@@ -55,9 +72,10 @@ const Register = () => {
             disabled={loading} 
             onClick={handleSignUp}
         />
+        <ToastContainer />
         <Spacer width="auto" height="0.8rem" />
         <Link to="/">
-          <ButtonListView title={"Já possui conta? Faça login"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={loading} />
+          <ButtonListView type="button" title={"Já possui conta? Faça login"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={loading} />
         </Link>
       </TodoListContainer>
     </ListContainer>

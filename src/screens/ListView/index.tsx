@@ -100,7 +100,7 @@ const ListView = () => {
               task.label
             )}
             <Spacer width={"0.8rem"} />
-            <ButtonListView title={"x"} color={"#e63946"} width={"1.8rem"} height={"1.8rem"} disabled={false} onClick={(event) => handleClickRemove(event, task.id)} />
+            <ButtonListView type="button" title={"x"} color={"#e63946"} width={"1.8rem"} height={"1.8rem"} disabled={false} onClick={(event) => handleClickRemove(event, task.id)} />
           </TodoListItem>
 
         ))}</>}
@@ -108,7 +108,7 @@ const ListView = () => {
       <Spacer height="0.8rem" />
       <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
       <Spacer height="0.8rem" />
-      <ButtonListView title={"Sair"} color={"#81749c"} width="auto" height={"1.8rem"} disabled={false} onClick={handleClickLogout} />
+      <ButtonListView type="button" title={"Sair"} color={"#81749c"} width="auto" height={"1.8rem"} disabled={false} onClick={handleClickLogout} />
     </ListContainer>
   );
 };

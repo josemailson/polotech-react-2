@@ -3,6 +3,7 @@ import ListView from "screens/ListView";
 import Login from "screens/Login";
 import Register from "screens/Register";
 import AuthRoute from "./AuthRoute";
+import { IRegisterData } from "screens/Register/Register.types";
 
 export const router = createBrowserRouter([
     {
@@ -11,7 +12,7 @@ export const router = createBrowserRouter([
     },
     {
       path: "/register",
-      element: <Register />,
+      element: <Register/>,
     },
     {
       path: "/login",

@@ -8,12 +8,13 @@ export interface IButtonListViewProps {
   width: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void | ( (email: string, password: string) => void)
   disabled: boolean;
+  type: "button" | "submit" | "reset";
 }
 
-const ButtonListView = ({ title, color, height, width, onClick, disabled }: IButtonListViewProps) => {
+const ButtonListView = ({ title, color, height, width, onClick, disabled, type }: IButtonListViewProps) => {
 
   return (
-    <ButtonList className="button-list" type="button" title={title} color={color} height={height} width={width} onClick={onClick} disabled={disabled}>
+    <ButtonList className="button-list" type={type} title={title} color={color} height={height} width={width} onClick={onClick} disabled={disabled}>
       {title}
     </ButtonList>
   );

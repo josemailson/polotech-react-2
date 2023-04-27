@@ -2,23 +2,24 @@ import ButtonListView from "components/ButtonListView/ButtonListView";
 import Header from "components/Header/Header";
 import InputText from "components/InputText/InputText";
 import Spacer from "components/Spacer/Spacer";
-import { UserContext } from "contexts/UserContext";
-import { useContext, useState } from "react";
+import { useTask } from "contexts/UserContext";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ListContainer, TodoListContainer } from "screens/ListView/ListView.style";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const userContext = useContext(UserContext);
+  const {
+    handleSignIn,
+    user,
+    loading,
+    error,
+  } = useTask();
 
   const history = useNavigate();
-
-  const handleSignIn = userContext.handleSignIn;
-  const user = userContext.user;
-  const loading = userContext.loading;
-  const error = userContext.error;
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -28,12 +29,17 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleClickSignIn = (email: string, passowrd: string) => {
+  const handleClickSignIn = (email: string, password: string) => {
     handleSignIn(email, password);
-    console.log(user?.email);
-    setTimeout(() => {
-      history("/");
-    }, 1000);
+    const toastPosition = toast.POSITION.TOP_RIGHT;
+    if (user) {
+      toast.success("Login realizado com sucesso!", {position: toastPosition});
+      setTimeout(() => {
+        history("/");
+      }, 1000);
+    } else {
+      toast.error("Usuário ou senha não encontrado", {position: toastPosition});
+    }
   }
 
   if (error) {
@@ -54,6 +60,7 @@ const Login = () => {
         <InputText type="password" placeholder={"Senha"} inputColor={"#ffffff"} onChange={handlePasswordChange} value={password} />
         <Spacer height="1.2rem" />
         <ButtonListView
+          type={"button"}
           title={loading ? "Carregando..." : "Entrar"}
           color={"#81749c"}
           width={"97%"}
@@ -61,9 +68,10 @@ const Login = () => {
           disabled={loading}
           onClick={() => (handleClickSignIn(email, password))}
         />
+        <ToastContainer />
         <Spacer height="0.8rem" />
         <Link to="/register">
-          <ButtonListView title={"Não possui conta? Crie agora"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={false} />
+          <ButtonListView type={"button"} title={"Não possui conta? Crie agora"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={false} />
         </Link>
       </TodoListContainer>
     </ListContainer>
