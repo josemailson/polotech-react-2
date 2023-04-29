@@ -17,4 +17,5 @@ export const AppLayoutContainer = styled.div`
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    min-width: 320px;
 `;
