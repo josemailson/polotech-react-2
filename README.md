@@ -1,7 +1,7 @@
 
 # To Do App
 
-A To Do React Application. Using Firebase for authentication and Firestore for storage.
+A To Do React Application. Using Firebase for authentication and Firestore for databse.
 ## Authors
 - [@josemailson](https://github.com/josemailson)
 

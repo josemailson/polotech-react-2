@@ -132,9 +132,11 @@ export const UserContextProvider = ({ children }: UserContextProviderType) => {
     );
 
     return (
-      <>
-        <Header title={`Total de tarefas: ${tasks.length} | Concluídas: ${data.completed} | Pendentes: ${data.progress}`} color={"#ffffff"} as="h3" />
-      </>
+      <Header
+        title={`Total de tarefas: ${tasks.length} | Concluídas: ${data.completed} | Pendentes: ${data.progress} |`}
+        color={"#ffffff"}
+        as="h3"
+      />
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tasks]);
