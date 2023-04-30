@@ -108,7 +108,7 @@ const ListView = () => {
         ))}</>}
       </TodoListContainer>
       <Spacer height="0.8rem" />
-      <InputText placeholder={"Adicione uma nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
+      <InputText placeholder={"Entre com nova tarefa"} inputColor={"#ffffff"} onChange={handleNewTaskLabelChange} onKeyPress={handleNewTaskKeyPress} value={newTaskLabel} />
       <ToastContainer />
       <Spacer height="0.8rem" />
       <ButtonListView type="button" title={"Sair"} color={"#81749c"} width="auto" height={"1.8rem"} disabled={false} onClick={handleClickLogout} />
