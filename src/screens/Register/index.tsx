@@ -76,8 +76,9 @@ const Register = () => {
         <InputText type={"email"} placeholder={"E-mail"} inputColor={"#ffffff"} onChange={handleEmailChange} value={email} />
         <Spacer height="0.8rem" />
         <InputText type={"password"} placeholder={"Senha"} inputColor={"#ffffff"} onChange={handlePasswordChange} value={password} />
-        <Spacer height="1.2rem" />
-        <ButtonListView
+      </TodoListContainer>
+      <Spacer height="1.2rem" />
+      <ButtonListView
             type="submit" 
             title={loading ? "Carregando..." : "Criar conta"} 
             color={"#81749c"} 
@@ -91,7 +92,6 @@ const Register = () => {
         <Link to="/">
           <ButtonListView type="button" title={"Já possui conta? Faça login"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={loading} />
         </Link>
-      </TodoListContainer>
     </ListContainer>
   );
 };

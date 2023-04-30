@@ -39,18 +39,18 @@ const Login = () => {
   const validateEmail = (email: string): string | undefined => {
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
-        return 'O e-mail precisa ser válido';
+      return 'O e-mail precisa ser válido';
     }
   };
 
   useEffect(() => {
     const toastPosition = toast.POSITION.TOP_RIGHT;
     if (error) {
-      toast.error(error.message, {position: toastPosition});
+      toast.error(error.message, { position: toastPosition });
     } else if (loading) {
-      toast.info("Realizando login...", {position: toastPosition});
+      toast.info("Realizando login...", { position: toastPosition });
     } else if (user) {
-      toast.success("Login realizado com sucesso!", {position: toastPosition});
+      toast.success("Login realizado com sucesso!", { position: toastPosition });
       setAuthing(true);
       setShouldFetchTodos(true);
       setTimeout(() => {
@@ -61,13 +61,13 @@ const Login = () => {
 
   const handleClickSignIn = (email: string, password: string) => {
     const emailError = validateEmail(email);
-    if(emailError) {
-      toast.error(emailError, {position: toast.POSITION.TOP_RIGHT});
+    if (emailError) {
+      toast.error(emailError, { position: toast.POSITION.TOP_RIGHT });
       return;
     }
     signInWithEmailAndPassword(email, password);
   }
-  
+
   return (
     <ListContainer>
       <Header title={"To Do App"} color={"#ffffff"} as="h1" />
@@ -76,22 +76,22 @@ const Login = () => {
         <InputText type="email" placeholder={"E-mail"} inputColor={"#ffffff"} onChange={handleEmailChange} value={email} />
         <Spacer height="0.8rem" />
         <InputText type="password" placeholder={"Senha"} inputColor={"#ffffff"} onChange={handlePasswordChange} value={password} />
-        <Spacer height="1.2rem" />
-        <ButtonListView
-          type={"button"}
-          title={loading ? "Carregando..." : "Entrar"}
-          color={"#81749c"}
-          width={"97%"}
-          height={"1.8rem"}
-          disabled={loading}
-          onClick={() => (handleClickSignIn(email, password))}
-        />
-        <ToastContainer />
-        <Spacer height="0.8rem" />
-        <Link to="/register">
-          <ButtonListView type={"button"} title={"Não possui conta? Crie agora"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={false} />
-        </Link>
       </TodoListContainer>
+      <Spacer height="1.2rem" />
+      <ButtonListView
+        type={"button"}
+        title={loading ? "Carregando..." : "Entrar"}
+        color={"#81749c"}
+        width={"97%"}
+        height={"1.8rem"}
+        disabled={loading}
+        onClick={() => (handleClickSignIn(email, password))}
+      />
+      <ToastContainer />
+      <Spacer height="0.8rem" />
+      <Link to="/register">
+        <ButtonListView type={"button"} title={"Não possui conta? Crie agora"} color={"#81749c"} width={"97%"} height={"1.8rem"} disabled={false} />
+      </Link>
     </ListContainer>
   );
 };

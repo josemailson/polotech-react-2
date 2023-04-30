@@ -18,7 +18,7 @@ export const TodoListContainer = styled.div`
   display: flex;
   flex-direction: column;
   @media (max-width: 768px) {
-    padding: 0.8rem 0.2rem;
+    padding: 1.2rem 0.4rem;
     }
 `;
 
